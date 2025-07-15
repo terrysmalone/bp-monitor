@@ -72,9 +72,20 @@ export default function BPGraph({
         <text x={padding} y={graphHeight - padding + 18} fontSize={13} fill="#222">{minDia}</text>
         <text x={graphWidth - padding - 10} y={graphHeight - padding + 18} fontSize={13} fill="#222">{maxDia}</text>
         {/* Y-axis labels (systolic) */}
-        <text x={10} y={padding + 8} fontSize={13} fill="#222">{maxSys}</text>
-        <text x={10} y={graphHeight - padding} fontSize={13} fill="#222">{minSys}</text>
+        <text x={0} y={padding + 8} fontSize={13} fill="#222">{maxSys}</text>
+        <text x={0} y={graphHeight - padding} fontSize={13} fill="#222">{minSys}</text>
         {/* Axis titles */}
+        <text
+          x={12}
+          y={graphHeight / 2}
+          fontSize={15}
+          fill="#222"
+          textAnchor="middle"
+          fontWeight={600}
+          transform={`rotate(-90 12,${graphHeight / 2})`}
+        >
+          Systolic
+        </text>
         <text
           x={graphWidth / 2}
           y={graphHeight - 8}
@@ -84,17 +95,6 @@ export default function BPGraph({
           fontWeight={600}
         >
           Diastolic
-        </text>
-        <text
-          x={28}
-          y={graphHeight / 2}
-          fontSize={15}
-          fill="#222"
-          textAnchor="middle"
-          fontWeight={600}
-          transform={`rotate(-90 28,${graphHeight / 2})`}
-        >
-          Systolic
         </text>
       </svg>
       {/* Legend */}
