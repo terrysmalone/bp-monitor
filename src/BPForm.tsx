@@ -31,19 +31,20 @@ export default function BPForm({ setReadings }: Props) {
 
   return (
     <form onSubmit={handleSubmit} style={{ marginBottom: 24 }}>
-      <div>
-        <label>
+      <div style={{ marginBottom: 10 }}>
+        <label style={{ marginRight: 8 }}>
           Date:
           <input
             type="date"
             value={date}
             onChange={e => setDate(e.target.value)}
             required
+            style={{ marginLeft: 8 }}
           />
         </label>
       </div>
-      <div>
-        <label>
+      <div style={{ marginBottom: 10 }}>
+        <label style={{ marginRight: 8 }}>
           Systolic:
           <input
             type="number"
@@ -52,11 +53,12 @@ export default function BPForm({ setReadings }: Props) {
             required
             min={50}
             max={250}
+            style={{ marginLeft: 8 }}
           />
         </label>
       </div>
-      <div>
-        <label>
+      <div style={{ marginBottom: 10 }}>
+        <label style={{ marginRight: 8 }}>
           Diastolic:
           <input
             type="number"
@@ -65,11 +67,12 @@ export default function BPForm({ setReadings }: Props) {
             required
             min={30}
             max={150}
+            style={{ marginLeft: 8 }}
           />
         </label>
       </div>
-      <div>
-        <label>
+      <div style={{ marginBottom: 10 }}>
+        <label style={{ marginRight: 8 }}>
           Time of Day:
           <select
             value={timeOfDay}
