@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 type BPReading = {
@@ -7,11 +7,36 @@ type BPReading = {
   diastolic: number
 }
 
+function getBPColor(systolic: number, diastolic: number) {
+  if (systolic < 90 || diastolic < 60) return '#3498db' // Low - blue
+  if (systolic >= 135 || diastolic >= 85) return '#e74c3c' // High - red (updated threshold)
+  if (
+    (systolic >= 120 && systolic <= 134) ||
+    (diastolic >= 80 && diastolic <= 84)
+  )
+    return '#f39c12' // Slightly raised - orange
+  if (
+    (systolic >= 90 && systolic <= 119) &&
+    (diastolic >= 60 && diastolic <= 79)
+  )
+    return '#27ae60' // Healthy - green
+  return '#bdc3c7' // Default/unknown - grey
+}
+
 function App() {
-  const [readings, setReadings] = useState<BPReading[]>([])
+  // Use lazy initializer to load from localStorage only once
+  const [readings, setReadings] = useState<BPReading[]>(() => {
+    const stored = localStorage.getItem('bp-readings')
+    return stored ? JSON.parse(stored) : []
+  })
   const [date, setDate] = useState('')
   const [systolic, setSystolic] = useState('')
   const [diastolic, setDiastolic] = useState('')
+
+  // Save readings to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('bp-readings', JSON.stringify(readings))
+  }, [readings])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -133,7 +158,7 @@ function App() {
                 cx={getX(r.diastolic)}
                 cy={getY(r.systolic)}
                 r={4}
-                fill="#8e44ad"
+                fill={getBPColor(r.systolic, r.diastolic)}
                 stroke="#fff"
                 strokeWidth={1}
               />
@@ -148,6 +173,13 @@ function App() {
             <text x={5} y={padding + 5} fontSize={12} fill="#e74c3c">{maxSys}</text>
             <text x={5} y={graphHeight - padding} fontSize={12} fill="#e74c3c">{minSys}</text>
           </svg>
+          {/* Legend */}
+          <div style={{ display: 'flex', gap: 16, marginTop: 8, alignItems: 'center' }}>
+            <span><span style={{ display: 'inline-block', width: 12, height: 12, background: '#3498db', borderRadius: 6, marginRight: 4 }} />Low</span>
+            <span><span style={{ display: 'inline-block', width: 12, height: 12, background: '#27ae60', borderRadius: 6, marginRight: 4 }} />Healthy</span>
+            <span><span style={{ display: 'inline-block', width: 12, height: 12, background: '#f39c12', borderRadius: 6, marginRight: 4 }} />Slightly Raised</span>
+            <span><span style={{ display: 'inline-block', width: 12, height: 12, background: '#e74c3c', borderRadius: 6, marginRight: 4 }} />High</span>
+          </div>
         </>
       )}
     </div>
