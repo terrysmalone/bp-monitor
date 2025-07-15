@@ -7,22 +7,6 @@ type BPReading = {
   diastolic: number
 }
 
-function getBPColor(systolic: number, diastolic: number) {
-  if (systolic < 90 || diastolic < 60) return '#3498db' // Low - blue
-  if (systolic >= 135 || diastolic >= 85) return '#e74c3c' // High - red (updated threshold)
-  if (
-    (systolic >= 120 && systolic <= 134) ||
-    (diastolic >= 80 && diastolic <= 84)
-  )
-    return '#f39c12' // Slightly raised - orange
-  if (
-    (systolic >= 90 && systolic <= 119) &&
-    (diastolic >= 60 && diastolic <= 79)
-  )
-    return '#27ae60' // Healthy - green
-  return '#bdc3c7' // Default/unknown - grey
-}
-
 function App() {
   const [readings, setReadings] = useState<BPReading[]>(() => {
     const stored = localStorage.getItem('bp-readings')
@@ -141,7 +125,7 @@ function App() {
         <>
           <svg width={graphWidth} height={graphHeight} style={{ background: '#f9f9f9', border: '1px solid #ccc' }}>
             {/* Category backgrounds */}
-            {categories.map((cat, i) => (
+            {categories.map((cat) => (
               <rect
                 key={cat.name}
                 x={getX(minDia)}
