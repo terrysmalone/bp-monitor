@@ -24,7 +24,6 @@ function getBPColor(systolic: number, diastolic: number) {
 }
 
 function App() {
-  // Use lazy initializer to load from localStorage only once
   const [readings, setReadings] = useState<BPReading[]>(() => {
     const stored = localStorage.getItem('bp-readings')
     return stored ? JSON.parse(stored) : []
@@ -33,7 +32,6 @@ function App() {
   const [systolic, setSystolic] = useState('')
   const [diastolic, setDiastolic] = useState('')
 
-  // Save readings to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem('bp-readings', JSON.stringify(readings))
   }, [readings])
@@ -54,7 +52,6 @@ function App() {
     setDiastolic('')
   }
 
-  // Fixed graph bounds
   const maxSys = 170
   const minSys = 0
   const maxDia = 100
@@ -63,48 +60,38 @@ function App() {
   const graphWidth = 400
   const padding = 30
 
-  // X axis: diastolic (0–100)
   const getX = (diastolic: number) =>
     padding + ((diastolic - minDia) * (graphWidth - 2 * padding)) / (maxDia - minDia)
-  // Y axis: systolic (0–170, 0 at bottom)
   const getY = (systolic: number) =>
     padding + ((maxSys - systolic) * (graphHeight - 2 * padding)) / (maxSys - minSys)
 
-  // Category boundaries (each starts at 0 diastolic, maxSys systolic and fills to its threshold)
   // Draw from largest to smallest so smaller blocks are on top
   const categories = [
     {
       name: 'High',
-      color: '#ffb3b3', // Stronger red
+      color: '#ffb3b3',
       x2: maxDia,
       y2: maxSys,
     },
     {
       name: 'Slightly Raised',
-      color: '#ffe082', // Stronger yellow/orange
+      color: '#ffe082',
       x2: 85,
       y2: 135,
     },
     {
       name: 'Healthy',
-      color: '#81e88b', // Stronger green
+      color: '#81e88b',
       x2: 80,
       y2: 120,
     },
     {
       name: 'Low',
-      color: '#82b6ff', // Stronger blue
+      color: '#82b6ff',
       x2: 60,
       y2: 90,
     },
   ]
-
-  // Points for polyline and dots
-  const points = readings.map(r => {
-    const x = getX(r.diastolic)
-    const y = getY(r.systolic)
-    return `${x},${y}`
-  }).join(' ')
 
   return (
     <div style={{ maxWidth: 500, margin: '2rem auto', padding: 16 }}>
@@ -152,26 +139,6 @@ function App() {
 
       {readings.length > 0 && (
         <>
-          <h2>Readings</h2>
-          <table style={{ width: '100%', marginBottom: 24 }}>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Systolic</th>
-                <th>Diastolic</th>
-              </tr>
-            </thead>
-            <tbody>
-              {readings.map((r, i) => (
-                <tr key={i}>
-                  <td>{r.date}</td>
-                  <td>{r.systolic}</td>
-                  <td>{r.diastolic}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <h2>Graph</h2>
           <svg width={graphWidth} height={graphHeight} style={{ background: '#f9f9f9', border: '1px solid #ccc' }}>
             {/* Category backgrounds */}
             {categories.map((cat, i) => (
@@ -221,3 +188,4 @@ function App() {
 }
 
 export default App
+
