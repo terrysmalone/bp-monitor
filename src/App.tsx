@@ -40,6 +40,59 @@ function App() {
     setTimeOfDay('morning')
   }
 
+  // Export readings as text file
+  const handleExport = () => {
+    const header = 'date,timeOfDay,systolic,diastolic'
+    const lines = readings.map(r =>
+      [r.date, r.timeOfDay, r.systolic, r.diastolic].join(',')
+    )
+    const content = [header, ...lines].join('\n')
+    const blob = new Blob([content], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'bp-readings.txt'
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  // Import readings from text file
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const text = event.target?.result as string
+      // Split on both \n and \r\n to support all platforms, and filter out empty lines
+      const lines = text.split(/\r?\n/).map(line => line.trim()).filter(Boolean)
+      if (lines.length < 2) return
+      const imported: BPReading[] = []
+      for (let i = 1; i < lines.length; i++) {
+        const [date, timeOfDay, systolic, diastolic] = lines[i].split(',')
+        if (
+          date &&
+          (timeOfDay === 'morning' || timeOfDay === 'evening') &&
+          !isNaN(Number(systolic)) &&
+          !isNaN(Number(diastolic))
+        ) {
+          imported.push({
+            date,
+            timeOfDay,
+            systolic: Number(systolic),
+            diastolic: Number(diastolic),
+          })
+        }
+      }
+      // Replace readings with imported readings only
+      setReadings(imported)
+    }
+    reader.readAsText(file)
+    // Reset the input so the same file can be imported again if needed
+    e.target.value = ''
+  }
+
   const maxSys = 170
   const minSys = 0
   const maxDia = 100
@@ -121,6 +174,21 @@ function App() {
             )
           })}
         </ul>
+        {/* Import/Export Buttons */}
+        <div style={{ marginTop: 16 }}>
+          <button type="button" onClick={handleExport} style={{ marginRight: 8 }}>
+            Export
+          </button>
+          <label style={{ display: 'inline-block', cursor: 'pointer' }}>
+            <span style={{ textDecoration: 'underline', color: '#0074d9' }}>Import</span>
+            <input
+              type="file"
+              accept=".txt"
+              onChange={handleImport}
+              style={{ display: 'none' }}
+            />
+          </label>
+        </div>
       </div>
       {/* Right: Form and Graph */}
       <div style={{ flex: 1 }}>
