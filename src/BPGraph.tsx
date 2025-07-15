@@ -1,4 +1,3 @@
-import React from 'react'
 import type { BPReading } from './App'
 
 type Category = {

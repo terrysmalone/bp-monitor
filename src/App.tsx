@@ -3,6 +3,7 @@ import './App.css'
 import ReadingList from './ReadingList'
 import BPForm from './BPForm'
 import BPGraph from './BPGraph'
+import TimelineGraph from './TimelineGraph'
 
 export type BPReading = {
   date: string
@@ -160,17 +161,27 @@ function App() {
           </label>
         </div>
         {readings.length > 0 && (
-          <BPGraph
-            readings={filteredReadings}
-            maxSys={maxSys}
-            minSys={minSys}
-            maxDia={maxDia}
-            minDia={minDia}
-            graphHeight={graphHeight}
-            graphWidth={graphWidth}
-            padding={padding}
-            categories={categories}
-          />
+          <>
+            <BPGraph
+              readings={filteredReadings}
+              maxSys={maxSys}
+              minSys={minSys}
+              maxDia={maxDia}
+              minDia={minDia}
+              graphHeight={graphHeight}
+              graphWidth={graphWidth}
+              padding={padding}
+              categories={categories}
+            />
+            <div style={{ marginTop: 32 }}>
+              <TimelineGraph
+                readings={filteredReadings}
+                graphHeight={180}
+                graphWidth={400}
+                padding={30}
+              />
+            </div>
+          </>
         )}
       </div>
     </div>
