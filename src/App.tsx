@@ -176,9 +176,9 @@ function App() {
         </ul>
         {/* Import/Export Buttons */}
         <div style={{ marginTop: 16 }}>
-          <button type="button" onClick={handleExport} style={{ marginRight: 8 }}>
-            Export
-          </button>
+          <label style={{ display: 'inline-block', cursor: 'pointer', marginRight: 8 }}>
+            <span style={{ textDecoration: 'underline', color: '#0074d9' }} onClick={handleExport}>Export</span>
+          </label>
           <label style={{ display: 'inline-block', cursor: 'pointer' }}>
             <span style={{ textDecoration: 'underline', color: '#0074d9' }}>Import</span>
             <input
@@ -192,7 +192,6 @@ function App() {
       </div>
       {/* Right: Form and Graph */}
       <div style={{ flex: 1 }}>
-        <h1>Blood Pressure Monitor</h1>
         <form onSubmit={handleSubmit} style={{ marginBottom: 24 }}>
           <div>
             <label>
