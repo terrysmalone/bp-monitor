@@ -41,6 +41,21 @@ export default function ReadingList({ readings, onExport, onImport }: Props) {
       }}
     >
       <h2 style={{ fontSize: 20, marginBottom: 14, color: '#0074d9', letterSpacing: 1 }}>Readings</h2>
+      {/* Export/Import buttons moved above the list */}
+      <div style={{ marginBottom: 14, display: 'flex', gap: 10 }}>
+        <label style={{ display: 'inline-block', cursor: 'pointer', marginRight: 8 }}>
+          <span style={{ textDecoration: 'underline', color: '#0074d9', fontWeight: 500 }} onClick={onExport}>Export</span>
+        </label>
+        <label style={{ display: 'inline-block', cursor: 'pointer' }}>
+          <span style={{ textDecoration: 'underline', color: '#0074d9', fontWeight: 500 }}>Import</span>
+          <input
+            type="file"
+            accept=".txt"
+            onChange={onImport}
+            style={{ display: 'none' }}
+          />
+        </label>
+      </div>
       <div
         style={{
           overflowY: 'auto',
@@ -86,20 +101,6 @@ export default function ReadingList({ readings, onExport, onImport }: Props) {
             )
           })}
         </ul>
-      </div>
-      <div style={{ marginTop: 18, display: 'flex', gap: 10 }}>
-        <label style={{ display: 'inline-block', cursor: 'pointer', marginRight: 8 }}>
-          <span style={{ textDecoration: 'underline', color: '#0074d9', fontWeight: 500 }} onClick={onExport}>Export</span>
-        </label>
-        <label style={{ display: 'inline-block', cursor: 'pointer' }}>
-          <span style={{ textDecoration: 'underline', color: '#0074d9', fontWeight: 500 }}>Import</span>
-          <input
-            type="file"
-            accept=".txt"
-            onChange={onImport}
-            style={{ display: 'none' }}
-          />
-        </label>
       </div>
     </div>
   )

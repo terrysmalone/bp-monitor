@@ -16,8 +16,8 @@ const maxSys = 170
 const minSys = 0
 const maxDia = 100
 const minDia = 0
-const graphHeight = 200
-const graphWidth = 400
+const graphHeight = 420
+const graphWidth = 820
 const padding = 30
 
 const categories = [
@@ -122,7 +122,7 @@ function App() {
   return (
     <div
       style={{
-        maxWidth: 900,
+        maxWidth: 1200,
         margin: '2rem auto',
         padding: 24,
         display: 'flex',
@@ -147,14 +147,18 @@ function App() {
       >
         Blood pressure tracker
       </h1>
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 40, width: '100%' }}>
-        <ReadingList
-          readings={sortedReadings}
-          onExport={handleExport}
-          onImport={handleImport}
-        />
-        <div style={{ flex: 1, background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px 0 rgba(60,60,60,0.06)', padding: 24 }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 32, width: '100%' }}>
+        {/* Left column: BPForm above ReadingList */}
+        <div style={{ minWidth: 260, display: 'flex', flexDirection: 'column', gap: 18 }}>
           <BPForm setReadings={setReadings} />
+          <ReadingList
+            readings={sortedReadings}
+            onExport={handleExport}
+            onImport={handleImport}
+          />
+        </div>
+        {/* Right column: Graphs */}
+        <div style={{ flex: 1, background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px 0 rgba(60,60,60,0.06)', padding: 24 }}>
           <div style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 18 }}>
             <span style={{ fontWeight: 500, color: '#444', marginRight: 8 }}>Show:</span>
             <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
