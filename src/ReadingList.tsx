@@ -26,8 +26,18 @@ function getReadingBgColor(systolic: number, diastolic: number) {
 
 export default function ReadingList({ readings, onExport, onImport }: Props) {
   return (
-    <div style={{ minWidth: 180, textAlign: 'left' }}>
-      <h2 style={{ fontSize: 18, marginBottom: 8 }}>Readings</h2>
+    <div
+      style={{
+        minWidth: 210,
+        textAlign: 'left',
+        background: '#fff',
+        borderRadius: 12,
+        boxShadow: '0 2px 8px 0 rgba(60,60,60,0.06)',
+        padding: 20,
+        marginTop: 0,
+      }}
+    >
+      <h2 style={{ fontSize: 20, marginBottom: 14, color: '#0074d9', letterSpacing: 1 }}>Readings</h2>
       <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
         {readings.map((r, i) => {
           const [year, month, day] = r.date.split('-')
@@ -38,31 +48,34 @@ export default function ReadingList({ readings, onExport, onImport }: Props) {
             <li
               key={i}
               style={{
-                marginBottom: 8,
+                marginBottom: 10,
                 fontSize: 15,
-                borderBottom: '1px solid #eee',
-                paddingBottom: 4,
+                borderBottom: '1px solid #f0f0f0',
+                paddingBottom: 7,
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 background: bgColor,
-                borderRadius: 4,
-                paddingLeft: 6,
-                paddingRight: 6,
+                borderRadius: 6,
+                paddingLeft: 10,
+                paddingRight: 10,
+                boxShadow: bgColor !== '#fff' ? '0 1px 4px 0 rgba(60,60,60,0.04)' : undefined,
+                fontWeight: 500,
+                color: '#222',
               }}
             >
               <span>{formattedDate} {timeLabel}</span>
-              <span>{r.systolic}/{r.diastolic}</span>
+              <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>{r.systolic}/{r.diastolic}</span>
             </li>
           )
         })}
       </ul>
-      <div style={{ marginTop: 16 }}>
+      <div style={{ marginTop: 18, display: 'flex', gap: 10 }}>
         <label style={{ display: 'inline-block', cursor: 'pointer', marginRight: 8 }}>
-          <span style={{ textDecoration: 'underline', color: '#0074d9' }} onClick={onExport}>Export</span>
+          <span style={{ textDecoration: 'underline', color: '#0074d9', fontWeight: 500 }} onClick={onExport}>Export</span>
         </label>
         <label style={{ display: 'inline-block', cursor: 'pointer' }}>
-          <span style={{ textDecoration: 'underline', color: '#0074d9' }}>Import</span>
+          <span style={{ textDecoration: 'underline', color: '#0074d9', fontWeight: 500 }}>Import</span>
           <input
             type="file"
             accept=".txt"
@@ -74,3 +87,4 @@ export default function ReadingList({ readings, onExport, onImport }: Props) {
     </div>
   )
 }
+

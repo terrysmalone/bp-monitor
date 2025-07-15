@@ -120,60 +120,75 @@ function App() {
       : readings.filter(r => r.timeOfDay === graphFilter)
 
   return (
-    <div style={{ maxWidth: 700, margin: '2rem auto', padding: 16, display: 'flex', alignItems: 'flex-start', gap: 32 }}>
+    <div
+      style={{
+        maxWidth: 900,
+        margin: '2rem auto',
+        padding: 24,
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: 40,
+        background: '#f4f8fb',
+        borderRadius: 16,
+        boxShadow: '0 4px 24px 0 rgba(60,60,60,0.08)',
+      }}
+    >
       <ReadingList
         readings={sortedReadings}
         onExport={handleExport}
         onImport={handleImport}
       />
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1, background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px 0 rgba(60,60,60,0.06)', padding: 24 }}>
         <BPForm setReadings={setReadings} />
-        <div style={{ marginBottom: 16 }}>
-          <label>
+        <div style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 18 }}>
+          <span style={{ fontWeight: 500, color: '#444', marginRight: 8 }}>Show:</span>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <input
               type="radio"
               value="all"
               checked={graphFilter === 'all'}
               onChange={() => setGraphFilter('all')}
-              style={{ marginRight: 4 }}
+              style={{ accentColor: '#0074d9' }}
             />
             All
           </label>
-          <label style={{ marginLeft: 12 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <input
               type="radio"
               value="morning"
               checked={graphFilter === 'morning'}
               onChange={() => setGraphFilter('morning')}
-              style={{ marginRight: 4 }}
+              style={{ accentColor: '#0074d9' }}
             />
             Morning
           </label>
-          <label style={{ marginLeft: 12 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <input
               type="radio"
               value="evening"
               checked={graphFilter === 'evening'}
               onChange={() => setGraphFilter('evening')}
-              style={{ marginRight: 4 }}
+              style={{ accentColor: '#0074d9' }}
             />
             Evening
           </label>
         </div>
         {readings.length > 0 && (
           <>
-            <BPGraph
-              readings={filteredReadings}
-              maxSys={maxSys}
-              minSys={minSys}
-              maxDia={maxDia}
-              minDia={minDia}
-              graphHeight={graphHeight}
-              graphWidth={graphWidth}
-              padding={padding}
-              categories={categories}
-            />
-            <div style={{ marginTop: 32 }}>
+            <div style={{ background: '#f9f9f9', borderRadius: 10, padding: 16, boxShadow: '0 1px 4px 0 rgba(60,60,60,0.04)' }}>
+              <BPGraph
+                readings={filteredReadings}
+                maxSys={maxSys}
+                minSys={minSys}
+                maxDia={maxDia}
+                minDia={minDia}
+                graphHeight={graphHeight}
+                graphWidth={graphWidth}
+                padding={padding}
+                categories={categories}
+              />
+            </div>
+            <div style={{ marginTop: 32, background: '#fafbfc', borderRadius: 10, padding: 16, boxShadow: '0 1px 4px 0 rgba(60,60,60,0.04)' }}>
               <TimelineGraph
                 readings={filteredReadings}
                 graphHeight={180}
@@ -189,3 +204,4 @@ function App() {
 }
 
 export default App
+
