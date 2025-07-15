@@ -30,9 +30,21 @@ export default function BPForm({ setReadings }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: 24, background: '#f7fafd', borderRadius: 10, padding: 18, boxShadow: '0 1px 4px 0 rgba(60,60,60,0.04)' }}>
-      <div style={{ marginBottom: 14, display: 'flex', alignItems: 'center' }}>
-        <label style={{ marginRight: 12, minWidth: 70, fontWeight: 500 }}>
+    <form
+      onSubmit={handleSubmit}
+      style={{
+        marginBottom: 20,
+        background: '#f7fafd',
+        borderRadius: 10,
+        padding: 14,
+        boxShadow: '0 1px 4px 0 rgba(60,60,60,0.04)',
+        maxWidth: 340,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+      }}
+    >
+      <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center' }}>
+        <label style={{ minWidth: 90, fontWeight: 500, textAlign: 'left', marginRight: 10 }}>
           Date:
         </label>
         <input
@@ -40,11 +52,11 @@ export default function BPForm({ setReadings }: Props) {
           value={date}
           onChange={e => setDate(e.target.value)}
           required
-          style={{ marginLeft: 8, padding: '4px 8px', borderRadius: 4, border: '1px solid #ccc' }}
+          style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ccc', flex: 1 }}
         />
       </div>
-      <div style={{ marginBottom: 14, display: 'flex', alignItems: 'center' }}>
-        <label style={{ marginRight: 12, minWidth: 70, fontWeight: 500 }}>
+      <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center' }}>
+        <label style={{ minWidth: 90, fontWeight: 500, textAlign: 'left', marginRight: 10 }}>
           Systolic:
         </label>
         <input
@@ -54,11 +66,11 @@ export default function BPForm({ setReadings }: Props) {
           required
           min={50}
           max={250}
-          style={{ marginLeft: 8, padding: '4px 8px', borderRadius: 4, border: '1px solid #ccc' }}
+          style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ccc', flex: 1 }}
         />
       </div>
-      <div style={{ marginBottom: 14, display: 'flex', alignItems: 'center' }}>
-        <label style={{ marginRight: 12, minWidth: 70, fontWeight: 500 }}>
+      <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center' }}>
+        <label style={{ minWidth: 90, fontWeight: 500, textAlign: 'left', marginRight: 10 }}>
           Diastolic:
         </label>
         <input
@@ -68,18 +80,18 @@ export default function BPForm({ setReadings }: Props) {
           required
           min={30}
           max={150}
-          style={{ marginLeft: 8, padding: '4px 8px', borderRadius: 4, border: '1px solid #ccc' }}
+          style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ccc', flex: 1 }}
         />
       </div>
-      <div style={{ marginBottom: 14, display: 'flex', alignItems: 'center' }}>
-        <label style={{ marginRight: 12, minWidth: 70, fontWeight: 500 }}>
+      <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center' }}>
+        <label style={{ minWidth: 90, fontWeight: 500, textAlign: 'left', marginRight: 10 }}>
           Time of Day:
         </label>
         <select
           value={timeOfDay}
           onChange={e => setTimeOfDay(e.target.value as 'morning' | 'evening')}
           required
-          style={{ marginLeft: 8, padding: '4px 8px', borderRadius: 4, border: '1px solid #ccc' }}
+          style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ccc', flex: 1 }}
         >
           <option value="morning">Morning</option>
           <option value="evening">Evening</option>
@@ -97,7 +109,8 @@ export default function BPForm({ setReadings }: Props) {
           fontSize: 16,
           cursor: 'pointer',
           marginTop: 6,
-          boxShadow: '0 1px 4px 0 rgba(60,60,60,0.04)'
+          boxShadow: '0 1px 4px 0 rgba(60,60,60,0.04)',
+          width: '100%',
         }}
       >
         Add Reading
@@ -105,4 +118,3 @@ export default function BPForm({ setReadings }: Props) {
     </form>
   )
 }
-
