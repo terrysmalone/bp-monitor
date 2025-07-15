@@ -168,11 +168,31 @@ function App() {
             <line x1={padding} y1={padding} x2={padding} y2={graphHeight - padding} stroke="#888" />
             <line x1={padding} y1={graphHeight - padding} x2={graphWidth - padding} y2={graphHeight - padding} stroke="#888" />
             {/* X-axis labels (diastolic) */}
-            <text x={padding} y={graphHeight - padding + 15} fontSize={12} fill="#3498db">{minDia}</text>
-            <text x={graphWidth - padding - 10} y={graphHeight - padding + 15} fontSize={12} fill="#3498db">{maxDia}</text>
+            <text x={padding} y={graphHeight - padding + 15} fontSize={12} fill="#000">{minDia}</text>
+            <text x={graphWidth - padding - 10} y={graphHeight - padding + 15} fontSize={12} fill="#000">{maxDia}</text>
             {/* Y-axis labels (systolic) */}
-            <text x={5} y={padding + 5} fontSize={12} fill="#e74c3c">{maxSys}</text>
-            <text x={5} y={graphHeight - padding} fontSize={12} fill="#e74c3c">{minSys}</text>
+            <text x={5} y={padding + 5} fontSize={12} fill="#000">{maxSys}</text>
+            <text x={5} y={graphHeight - padding} fontSize={12} fill="#000">{minSys}</text>
+            {/* Axis titles */}
+            <text
+              x={graphWidth / 2}
+              y={graphHeight - 5}
+              fontSize={14}
+              fill="#000"
+              textAnchor="middle"
+            >
+              Diastolic
+            </text>
+            <text
+              x={18}
+              y={graphHeight / 2}
+              fontSize={14}
+              fill="#000"
+              textAnchor="middle"
+              transform={`rotate(-90 18,${graphHeight / 2})`}
+            >
+              Systolic
+            </text>
           </svg>
           {/* Legend */}
           <div style={{ display: 'flex', gap: 16, marginTop: 8, alignItems: 'center' }}>
@@ -188,4 +208,3 @@ function App() {
 }
 
 export default App
-
