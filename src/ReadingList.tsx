@@ -35,41 +35,58 @@ export default function ReadingList({ readings, onExport, onImport }: Props) {
         boxShadow: '0 2px 8px 0 rgba(60,60,60,0.06)',
         padding: 20,
         marginTop: 0,
+        maxHeight: '80vh',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       <h2 style={{ fontSize: 20, marginBottom: 14, color: '#0074d9', letterSpacing: 1 }}>Readings</h2>
-      <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-        {readings.map((r, i) => {
-          const [year, month, day] = r.date.split('-')
-          const formattedDate = `${day}/${month}/${year}`
-          const timeLabel = r.timeOfDay === 'morning' ? 'AM' : 'PM'
-          const bgColor = getReadingBgColor(r.systolic, r.diastolic)
-          return (
-            <li
-              key={i}
-              style={{
-                marginBottom: 10,
-                fontSize: 15,
-                borderBottom: '1px solid #f0f0f0',
-                paddingBottom: 7,
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                background: bgColor,
-                borderRadius: 6,
-                paddingLeft: 10,
-                paddingRight: 10,
-                boxShadow: bgColor !== '#fff' ? '0 1px 4px 0 rgba(60,60,60,0.04)' : undefined,
-                fontWeight: 500,
-                color: '#222',
-              }}
-            >
-              <span>{formattedDate} {timeLabel}</span>
-              <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>{r.systolic}/{r.diastolic}</span>
-            </li>
-          )
-        })}
-      </ul>
+      <div
+        style={{
+          overflowY: 'auto',
+          flex: 1,
+          minHeight: 0,
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#0074d9 #eaeaea',
+        } as React.CSSProperties}
+        className="pretty-scrollbar"
+      >
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          {readings.map((r, i) => {
+            const [year, month, day] = r.date.split('-')
+            const formattedDate = `${day}/${month}/${year}`
+            const timeLabel = r.timeOfDay === 'morning' ? 'AM' : 'PM'
+            const bgColor = getReadingBgColor(r.systolic, r.diastolic)
+            return (
+              <li
+                key={i}
+                style={{
+                  // marginBottom: 10, // Removed vertical gap
+                  fontSize: 15,
+                  borderBottom: '1px solid #f0f0f0',
+                  paddingBottom: 7,
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  background: bgColor,
+                  borderRadius: 6,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  boxShadow: bgColor !== '#fff' ? '0 1px 4px 0 rgba(60,60,60,0.04)' : undefined,
+                  fontWeight: 500,
+                  color: '#222',
+                  // Remove top/bottom margin for first/last
+                  marginTop: 0,
+                  marginBottom: 0,
+                }}
+              >
+                <span>{formattedDate} {timeLabel}</span>
+                <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>{r.systolic}/{r.diastolic}</span>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
       <div style={{ marginTop: 18, display: 'flex', gap: 10 }}>
         <label style={{ display: 'inline-block', cursor: 'pointer', marginRight: 8 }}>
           <span style={{ textDecoration: 'underline', color: '#0074d9', fontWeight: 500 }} onClick={onExport}>Export</span>
@@ -87,4 +104,3 @@ export default function ReadingList({ readings, onExport, onImport }: Props) {
     </div>
   )
 }
-

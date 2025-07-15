@@ -37,7 +37,7 @@ export default function BPGraph({
 
   return (
     <>
-      <svg width={graphWidth} height={graphHeight} style={{ background: '#f9f9f9', border: '1px solid #ccc', borderRadius: 10, boxShadow: '0 1px 4px 0 rgba(60,60,60,0.04)' }}>
+      <svg width={graphWidth} height={graphHeight} style={{ background: '#f9f9f9', border: '1px solid #ccc', boxShadow: '0 1px 4px 0 rgba(60,60,60,0.04)' }}>
         {/* Category backgrounds */}
         {categories.map((cat) => (
           <rect
@@ -49,7 +49,7 @@ export default function BPGraph({
             fill={cat.color}
             stroke="none"
             opacity={0.85}
-            rx={6}
+            // Removed rx={6} for sharp corners
           />
         ))}
         {/* Dots */}
@@ -107,4 +107,3 @@ export default function BPGraph({
     </>
   )
 }
-
