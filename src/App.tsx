@@ -77,116 +77,150 @@ function App() {
     },
   ]
 
-  return (
-    <div style={{ maxWidth: 500, margin: '2rem auto', padding: 16 }}>
-      <h1>Blood Pressure Monitor</h1>
-      <form onSubmit={handleSubmit} style={{ marginBottom: 24 }}>
-        <div>
-          <label>
-            Date:
-            <input
-              type="date"
-              value={date}
-              onChange={e => setDate(e.target.value)}
-              required
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Systolic:
-            <input
-              type="number"
-              value={systolic}
-              onChange={e => setSystolic(e.target.value)}
-              required
-              min={50}
-              max={250}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Diastolic:
-            <input
-              type="number"
-              value={diastolic}
-              onChange={e => setDiastolic(e.target.value)}
-              required
-              min={30}
-              max={150}
-            />
-          </label>
-        </div>
-        <button type="submit">Add Reading</button>
-      </form>
+  // Sort readings by date ascending, then reverse for descending (latest first)
+  const sortedReadings = [...readings].sort((a, b) => a.date.localeCompare(b.date)).reverse()
 
-      {readings.length > 0 && (
-        <>
-          <svg width={graphWidth} height={graphHeight} style={{ background: '#f9f9f9', border: '1px solid #ccc' }}>
-            {/* Category backgrounds */}
-            {categories.map((cat) => (
-              <rect
-                key={cat.name}
-                x={getX(minDia)}
-                y={getY(cat.y2)}
-                width={getX(cat.x2) - getX(minDia)}
-                height={getY(minSys) - getY(cat.y2)}
-                fill={cat.color}
-                stroke="none"
+  return (
+    <div style={{ maxWidth: 700, margin: '2rem auto', padding: 16, display: 'flex', alignItems: 'flex-start', gap: 32 }}>
+      {/* Left: Date-ordered readings list */}
+      <div style={{ minWidth: 160, textAlign: 'left' }}>
+        <h2 style={{ fontSize: 18, marginBottom: 8 }}>Readings</h2>
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          {sortedReadings.map((r, i) => {
+            // Format date as YYYY-MM-DD to DD/MM/YYYY
+            const [year, month, day] = r.date.split('-')
+            const formattedDate = `${day}/${month}/${year}`
+            return (
+              <li
+                key={i}
+                style={{
+                  marginBottom: 8,
+                  fontSize: 15,
+                  borderBottom: '1px solid #eee',
+                  paddingBottom: 4,
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}
+              >
+                <span>{formattedDate}</span>
+                <span>{r.systolic}/{r.diastolic}</span>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+      {/* Right: Form and Graph */}
+      <div style={{ flex: 1 }}>
+        <h1>Blood Pressure Monitor</h1>
+        <form onSubmit={handleSubmit} style={{ marginBottom: 24 }}>
+          <div>
+            <label>
+              Date:
+              <input
+                type="date"
+                value={date}
+                onChange={e => setDate(e.target.value)}
+                required
               />
-            ))}
-            {/* Dots */}
-            {readings.map((r, i) => (
-              <circle
-                key={`dot-${i}`}
-                cx={getX(r.diastolic)}
-                cy={getY(r.systolic)}
-                r={4}
-                fill="#000"
-                stroke="#fff"
-                strokeWidth={1}
-              />
-            ))}
-            {/* Axes */}
-            <line x1={padding} y1={padding} x2={padding} y2={graphHeight - padding} stroke="#888" />
-            <line x1={padding} y1={graphHeight - padding} x2={graphWidth - padding} y2={graphHeight - padding} stroke="#888" />
-            {/* X-axis labels (diastolic) */}
-            <text x={padding} y={graphHeight - padding + 15} fontSize={12} fill="#000">{minDia}</text>
-            <text x={graphWidth - padding - 10} y={graphHeight - padding + 15} fontSize={12} fill="#000">{maxDia}</text>
-            {/* Y-axis labels (systolic) */}
-            <text x={5} y={padding + 5} fontSize={12} fill="#000">{maxSys}</text>
-            <text x={5} y={graphHeight - padding} fontSize={12} fill="#000">{minSys}</text>
-            {/* Axis titles */}
-            <text
-              x={graphWidth / 2}
-              y={graphHeight - 5}
-              fontSize={14}
-              fill="#000"
-              textAnchor="middle"
-            >
-              Diastolic
-            </text>
-            <text
-              x={18}
-              y={graphHeight / 2}
-              fontSize={14}
-              fill="#000"
-              textAnchor="middle"
-              transform={`rotate(-90 18,${graphHeight / 2})`}
-            >
-              Systolic
-            </text>
-          </svg>
-          {/* Legend */}
-          <div style={{ display: 'flex', gap: 16, marginTop: 8, alignItems: 'center' }}>
-            <span><span style={{ display: 'inline-block', width: 12, height: 12, background: '#3498db', borderRadius: 6, marginRight: 4 }} />Low</span>
-            <span><span style={{ display: 'inline-block', width: 12, height: 12, background: '#27ae60', borderRadius: 6, marginRight: 4 }} />Healthy</span>
-            <span><span style={{ display: 'inline-block', width: 12, height: 12, background: '#f39c12', borderRadius: 6, marginRight: 4 }} />Slightly Raised</span>
-            <span><span style={{ display: 'inline-block', width: 12, height: 12, background: '#e74c3c', borderRadius: 6, marginRight: 4 }} />High</span>
+            </label>
           </div>
-        </>
-      )}
+          <div>
+            <label>
+              Systolic:
+              <input
+                type="number"
+                value={systolic}
+                onChange={e => setSystolic(e.target.value)}
+                required
+                min={50}
+                max={250}
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              Diastolic:
+              <input
+                type="number"
+                value={diastolic}
+                onChange={e => setDiastolic(e.target.value)}
+                required
+                min={30}
+                max={150}
+              />
+            </label>
+          </div>
+          <button type="submit">Add Reading</button>
+        </form>
+
+        {readings.length > 0 && (
+          <>
+            <svg width={graphWidth} height={graphHeight} style={{ background: '#f9f9f9', border: '1px solid #ccc' }}>
+              {/* Category backgrounds */}
+              {categories.map((cat) => (
+                <rect
+                  key={cat.name}
+                  x={getX(minDia)}
+                  y={getY(cat.y2)}
+                  width={getX(cat.x2) - getX(minDia)}
+                  height={getY(minSys) - getY(cat.y2)}
+                  fill={cat.color}
+                  stroke="none"
+                />
+              ))}
+              {/* Dots */}
+              {readings.map((r, i) => (
+                <circle
+                  key={`dot-${i}`}
+                  cx={getX(r.diastolic)}
+                  cy={getY(r.systolic)}
+                  r={4}
+                  fill="#000"
+                  stroke="#fff"
+                  strokeWidth={1}
+                />
+              ))}
+              {/* Axes */}
+              <line x1={padding} y1={padding} x2={padding} y2={graphHeight - padding} stroke="#888" />
+              <line x1={padding} y1={graphHeight - padding} x2={graphWidth - padding} y2={graphHeight - padding} stroke="#888" />
+              {/* X-axis labels (diastolic) */}
+              <text x={padding} y={graphHeight - padding + 15} fontSize={12} fill="#000">{minDia}</text>
+              <text x={graphWidth - padding - 10} y={graphHeight - padding + 15} fontSize={12} fill="#000">{maxDia}</text>
+              {/* Y-axis labels (systolic) */}
+              <text x={5} y={padding + 5} fontSize={12} fill="#000">{maxSys}</text>
+              <text x={5} y={graphHeight - padding} fontSize={12} fill="#000">{minSys}</text>
+              {/* Axis titles */}
+              <text
+                x={graphWidth / 2}
+                y={graphHeight - 5}
+                fontSize={14}
+                fill="#000"
+                textAnchor="middle"
+              >
+                Diastolic
+              </text>
+              <text
+                x={18}
+                y={graphHeight / 2}
+                fontSize={14}
+                fill="#000"
+                textAnchor="middle"
+                transform={`rotate(-90 18,${graphHeight / 2})`}
+              >
+                Systolic
+              </text>
+            </svg>
+            {/* Legend */}
+            <div style={{ display: 'flex', gap: 16, marginTop: 8, alignItems: 'center' }}>
+              <span><span style={{ display: 'inline-block', width: 12, height: 12, background: '#3498db', borderRadius: 6, marginRight: 4 }} />Low</span>
+              <span><span style={{ display: 'inline-block', width: 12, height: 12, background: '#27ae60', borderRadius: 6, marginRight: 4 }} />Healthy</span>
+              <span><span style={{ display: 'inline-block', width: 12, height: 12, background: '#f39c12', borderRadius: 6, marginRight: 4 }} />Slightly Raised</span>
+              <span><span style={{ display: 'inline-block', width: 12, height: 12, background: '#e74c3c', borderRadius: 6, marginRight: 4 }} />High</span>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   )
 }
