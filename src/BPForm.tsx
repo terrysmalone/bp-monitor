@@ -5,21 +5,69 @@ type Props = {
   setReadings: React.Dispatch<React.SetStateAction<BPReading[]>>
 }
 
+const MIN_SYS = 0
+const MAX_SYS = 170
+const MIN_DIA = 0
+const MAX_DIA = 100
+
+function isValidDate(date: string) {
+  if (!date) return false
+  // Check format YYYY-MM-DD and that it's a valid date
+  const [year, month, day] = date.split('-').map(Number)
+  if (!year || !month || !day) return false
+  const d = new Date(date)
+  return (
+    d instanceof Date &&
+    !isNaN(d.getTime()) &&
+    d.getFullYear() === year &&
+    d.getMonth() + 1 === month &&
+    d.getDate() === day
+  )
+}
+
 export default function BPForm({ setReadings }: Props) {
   const [date, setDate] = useState('')
   const [systolic, setSystolic] = useState('')
   const [diastolic, setDiastolic] = useState('')
   const [timeOfDay, setTimeOfDay] = useState<'morning' | 'evening'>('morning')
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!date || !systolic || !diastolic || !timeOfDay) return
+    setError(null)
+
+    // Validate date
+    if (!isValidDate(date)) {
+      setError('Please enter a valid date.')
+      return
+    }
+
+    // Validate systolic
+    const sys = Number(systolic)
+    if (isNaN(sys) || sys < MIN_SYS || sys > MAX_SYS) {
+      setError(`Systolic must be between ${MIN_SYS} and ${MAX_SYS}.`)
+      return
+    }
+
+    // Validate diastolic
+    const dia = Number(diastolic)
+    if (isNaN(dia) || dia < MIN_DIA || dia > MAX_DIA) {
+      setError(`Diastolic must be between ${MIN_DIA} and ${MAX_DIA}.`)
+      return
+    }
+
+    // Validate timeOfDay
+    if (!timeOfDay) {
+      setError('Please select time of day.')
+      return
+    }
+
     setReadings(prev => [
       ...prev,
       {
         date,
-        systolic: Number(systolic),
-        diastolic: Number(diastolic),
+        systolic: sys,
+        diastolic: dia,
         timeOfDay,
       },
     ])
@@ -64,8 +112,8 @@ export default function BPForm({ setReadings }: Props) {
           value={systolic}
           onChange={e => setSystolic(e.target.value)}
           required
-          min={50}
-          max={250}
+          min={MIN_SYS}
+          max={MAX_SYS}
           style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ccc', flex: 1 }}
         />
       </div>
@@ -78,8 +126,8 @@ export default function BPForm({ setReadings }: Props) {
           value={diastolic}
           onChange={e => setDiastolic(e.target.value)}
           required
-          min={30}
-          max={150}
+          min={MIN_DIA}
+          max={MAX_DIA}
           style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ccc', flex: 1 }}
         />
       </div>
@@ -97,6 +145,11 @@ export default function BPForm({ setReadings }: Props) {
           <option value="evening">Evening</option>
         </select>
       </div>
+      {error && (
+        <div style={{ color: '#e74c3c', marginBottom: 8, marginTop: 2, fontSize: 14 }}>
+          {error}
+        </div>
+      )}
       <button
         type="submit"
         style={{
