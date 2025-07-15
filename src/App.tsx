@@ -131,77 +131,92 @@ function App() {
         background: '#f4f8fb',
         borderRadius: 16,
         boxShadow: '0 4px 24px 0 rgba(60,60,60,0.08)',
+        flexDirection: 'column',
       }}
     >
-      <ReadingList
-        readings={sortedReadings}
-        onExport={handleExport}
-        onImport={handleImport}
-      />
-      <div style={{ flex: 1, background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px 0 rgba(60,60,60,0.06)', padding: 24 }}>
-        <BPForm setReadings={setReadings} />
-        <div style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 18 }}>
-          <span style={{ fontWeight: 500, color: '#444', marginRight: 8 }}>Show:</span>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <input
-              type="radio"
-              value="all"
-              checked={graphFilter === 'all'}
-              onChange={() => setGraphFilter('all')}
-              style={{ accentColor: '#0074d9' }}
-            />
-            All
-          </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <input
-              type="radio"
-              value="morning"
-              checked={graphFilter === 'morning'}
-              onChange={() => setGraphFilter('morning')}
-              style={{ accentColor: '#0074d9' }}
-            />
-            Morning
-          </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <input
-              type="radio"
-              value="evening"
-              checked={graphFilter === 'evening'}
-              onChange={() => setGraphFilter('evening')}
-              style={{ accentColor: '#0074d9' }}
-            />
-            Evening
-          </label>
+      <h1
+        style={{
+          fontSize: 28,
+          fontWeight: 700,
+          color: '#0074d9',
+          margin: '0 0 18px 0',
+          letterSpacing: 1,
+          textAlign: 'center',
+          width: '100%',
+        }}
+      >
+        Blood pressure tracker
+      </h1>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 40, width: '100%' }}>
+        <ReadingList
+          readings={sortedReadings}
+          onExport={handleExport}
+          onImport={handleImport}
+        />
+        <div style={{ flex: 1, background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px 0 rgba(60,60,60,0.06)', padding: 24 }}>
+          <BPForm setReadings={setReadings} />
+          <div style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 18 }}>
+            <span style={{ fontWeight: 500, color: '#444', marginRight: 8 }}>Show:</span>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <input
+                type="radio"
+                value="all"
+                checked={graphFilter === 'all'}
+                onChange={() => setGraphFilter('all')}
+                style={{ accentColor: '#0074d9' }}
+              />
+              All
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <input
+                type="radio"
+                value="morning"
+                checked={graphFilter === 'morning'}
+                onChange={() => setGraphFilter('morning')}
+                style={{ accentColor: '#0074d9' }}
+              />
+              Morning
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <input
+                type="radio"
+                value="evening"
+                checked={graphFilter === 'evening'}
+                onChange={() => setGraphFilter('evening')}
+                style={{ accentColor: '#0074d9' }}
+              />
+              Evening
+            </label>
+          </div>
+          {readings.length > 0 && (
+            <>
+              <div style={{ background: '#f9f9f9', borderRadius: 10, padding: 16, boxShadow: '0 1px 4px 0 rgba(60,60,60,0.04)' }}>
+                <BPGraph
+                  readings={filteredReadings}
+                  maxSys={maxSys}
+                  minSys={minSys}
+                  maxDia={maxDia}
+                  minDia={minDia}
+                  graphHeight={graphHeight}
+                  graphWidth={graphWidth}
+                  padding={padding}
+                  categories={categories}
+                />
+              </div>
+              <div style={{ marginTop: 32, background: '#fafbfc', borderRadius: 10, padding: 16, boxShadow: '0 1px 4px 0 rgba(60,60,60,0.04)' }}>
+                <TimelineGraph
+                  readings={filteredReadings}
+                  graphHeight={180}
+                  graphWidth={400}
+                  padding={30}
+                />
+              </div>
+            </>
+          )}
         </div>
-        {readings.length > 0 && (
-          <>
-            <div style={{ background: '#f9f9f9', borderRadius: 10, padding: 16, boxShadow: '0 1px 4px 0 rgba(60,60,60,0.04)' }}>
-              <BPGraph
-                readings={filteredReadings}
-                maxSys={maxSys}
-                minSys={minSys}
-                maxDia={maxDia}
-                minDia={minDia}
-                graphHeight={graphHeight}
-                graphWidth={graphWidth}
-                padding={padding}
-                categories={categories}
-              />
-            </div>
-            <div style={{ marginTop: 32, background: '#fafbfc', borderRadius: 10, padding: 16, boxShadow: '0 1px 4px 0 rgba(60,60,60,0.04)' }}>
-              <TimelineGraph
-                readings={filteredReadings}
-                graphHeight={180}
-                graphWidth={400}
-                padding={30}
-              />
-            </div>
-          </>
-        )}
       </div>
     </div>
   )
 }
 
 export default App
-
