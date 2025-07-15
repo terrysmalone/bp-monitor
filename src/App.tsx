@@ -70,6 +70,35 @@ function App() {
   const getY = (systolic: number) =>
     padding + ((maxSys - systolic) * (graphHeight - 2 * padding)) / (maxSys - minSys)
 
+  // Category boundaries (each starts at 0 diastolic, maxSys systolic and fills to its threshold)
+  // Draw from largest to smallest so smaller blocks are on top
+  const categories = [
+    {
+      name: 'High',
+      color: '#ffebee',
+      x2: maxDia,
+      y2: maxSys,
+    },
+    {
+      name: 'Slightly Raised',
+      color: '#fff8e1',
+      x2: 85,
+      y2: 135,
+    },
+    {
+      name: 'Healthy',
+      color: '#e8f5e9',
+      x2: 80,
+      y2: 120,
+    },
+    {
+      name: 'Low',
+      color: '#e3f2fd',
+      x2: 60,
+      y2: 90,
+    },
+  ]
+
   // Points for polyline and dots
   const points = readings.map(r => {
     const x = getX(r.diastolic)
@@ -144,13 +173,18 @@ function App() {
           </table>
           <h2>Graph</h2>
           <svg width={graphWidth} height={graphHeight} style={{ background: '#f9f9f9', border: '1px solid #ccc' }}>
-            {/* Line connecting points */}
-            <polyline
-              fill="none"
-              stroke="#8e44ad"
-              strokeWidth={2}
-              points={points}
-            />
+            {/* Category backgrounds */}
+            {categories.map((cat, i) => (
+              <rect
+                key={cat.name}
+                x={getX(minDia)}
+                y={getY(cat.y2)}
+                width={getX(cat.x2) - getX(minDia)}
+                height={getY(minSys) - getY(cat.y2)}
+                fill={cat.color}
+                stroke="none"
+              />
+            ))}
             {/* Dots */}
             {readings.map((r, i) => (
               <circle
