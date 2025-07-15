@@ -17,6 +17,7 @@ function App() {
   const [systolic, setSystolic] = useState('')
   const [diastolic, setDiastolic] = useState('')
   const [timeOfDay, setTimeOfDay] = useState<'morning' | 'evening'>('morning')
+  const [graphFilter, setGraphFilter] = useState<'all' | 'morning' | 'evening'>('all')
 
   useEffect(() => {
     localStorage.setItem('bp-readings', JSON.stringify(readings))
@@ -144,6 +145,12 @@ function App() {
     return b.date.localeCompare(a.date)
   })
 
+  // Filter readings for the graph based on graphFilter
+  const filteredReadings =
+    graphFilter === 'all'
+      ? readings
+      : readings.filter(r => r.timeOfDay === graphFilter)
+
   return (
     <div style={{ maxWidth: 700, margin: '2rem auto', padding: 16, display: 'flex', alignItems: 'flex-start', gap: 32 }}>
       {/* Left: Date-ordered readings list */}
@@ -247,6 +254,40 @@ function App() {
           <button type="submit">Add Reading</button>
         </form>
 
+        {/* Graph filter controls */}
+        <div style={{ marginBottom: 16 }}>
+          <label>
+            <input
+              type="radio"
+              value="all"
+              checked={graphFilter === 'all'}
+              onChange={() => setGraphFilter('all')}
+              style={{ marginRight: 4 }}
+            />
+            All
+          </label>
+          <label style={{ marginLeft: 12 }}>
+            <input
+              type="radio"
+              value="morning"
+              checked={graphFilter === 'morning'}
+              onChange={() => setGraphFilter('morning')}
+              style={{ marginRight: 4 }}
+            />
+            Morning
+          </label>
+          <label style={{ marginLeft: 12 }}>
+            <input
+              type="radio"
+              value="evening"
+              checked={graphFilter === 'evening'}
+              onChange={() => setGraphFilter('evening')}
+              style={{ marginRight: 4 }}
+            />
+            Evening
+          </label>
+        </div>
+
         {readings.length > 0 && (
           <>
             <svg width={graphWidth} height={graphHeight} style={{ background: '#f9f9f9', border: '1px solid #ccc' }}>
@@ -263,7 +304,7 @@ function App() {
                 />
               ))}
               {/* Dots */}
-              {readings.map((r, i) => (
+              {filteredReadings.map((r, i) => (
                 <circle
                   key={`dot-${i}`}
                   cx={getX(r.diastolic)}
