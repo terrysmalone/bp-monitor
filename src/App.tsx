@@ -5,6 +5,7 @@ type BPReading = {
   date: string
   systolic: number
   diastolic: number
+  timeOfDay: 'morning' | 'evening'
 }
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
   const [date, setDate] = useState('')
   const [systolic, setSystolic] = useState('')
   const [diastolic, setDiastolic] = useState('')
+  const [timeOfDay, setTimeOfDay] = useState<'morning' | 'evening'>('morning')
 
   useEffect(() => {
     localStorage.setItem('bp-readings', JSON.stringify(readings))
@@ -22,18 +24,20 @@ function App() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!date || !systolic || !diastolic) return
+    if (!date || !systolic || !diastolic || !timeOfDay) return
     setReadings([
       ...readings,
       {
         date,
         systolic: Number(systolic),
         diastolic: Number(diastolic),
+        timeOfDay,
       },
     ])
     setDate('')
     setSystolic('')
     setDiastolic('')
+    setTimeOfDay('morning')
   }
 
   const maxSys = 170
@@ -77,19 +81,27 @@ function App() {
     },
   ]
 
-  // Sort readings by date ascending, then reverse for descending (latest first)
-  const sortedReadings = [...readings].sort((a, b) => a.date.localeCompare(b.date)).reverse()
+  // Sort readings by date descending, and for same date, PM above AM
+  const sortedReadings = [...readings].sort((a, b) => {
+    if (a.date === b.date) {
+      // PM above AM
+      if (a.timeOfDay === b.timeOfDay) return 0
+      return a.timeOfDay === 'evening' ? -1 : 1
+    }
+    return b.date.localeCompare(a.date)
+  })
 
   return (
     <div style={{ maxWidth: 700, margin: '2rem auto', padding: 16, display: 'flex', alignItems: 'flex-start', gap: 32 }}>
       {/* Left: Date-ordered readings list */}
-      <div style={{ minWidth: 160, textAlign: 'left' }}>
+      <div style={{ minWidth: 180, textAlign: 'left' }}>
         <h2 style={{ fontSize: 18, marginBottom: 8 }}>Readings</h2>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
           {sortedReadings.map((r, i) => {
             // Format date as YYYY-MM-DD to DD/MM/YYYY
             const [year, month, day] = r.date.split('-')
             const formattedDate = `${day}/${month}/${year}`
+            const timeLabel = r.timeOfDay === 'morning' ? 'AM' : 'PM'
             return (
               <li
                 key={i}
@@ -103,7 +115,7 @@ function App() {
                   alignItems: 'center'
                 }}
               >
-                <span>{formattedDate}</span>
+                <span>{formattedDate} {timeLabel}</span>
                 <span>{r.systolic}/{r.diastolic}</span>
               </li>
             )
@@ -149,6 +161,20 @@ function App() {
                 min={30}
                 max={150}
               />
+            </label>
+          </div>
+          <div>
+            <label>
+              Time of Day:
+              <select
+                value={timeOfDay}
+                onChange={e => setTimeOfDay(e.target.value as 'morning' | 'evening')}
+                required
+                style={{ marginLeft: 8 }}
+              >
+                <option value="morning">Morning</option>
+                <option value="evening">Evening</option>
+              </select>
             </label>
           </div>
           <button type="submit">Add Reading</button>
