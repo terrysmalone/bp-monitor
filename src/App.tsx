@@ -75,25 +75,25 @@ function App() {
   const categories = [
     {
       name: 'High',
-      color: '#ffebee',
+      color: '#ffb3b3', // Stronger red
       x2: maxDia,
       y2: maxSys,
     },
     {
       name: 'Slightly Raised',
-      color: '#fff8e1',
+      color: '#ffe082', // Stronger yellow/orange
       x2: 85,
       y2: 135,
     },
     {
       name: 'Healthy',
-      color: '#e8f5e9',
+      color: '#81e88b', // Stronger green
       x2: 80,
       y2: 120,
     },
     {
       name: 'Low',
-      color: '#e3f2fd',
+      color: '#82b6ff', // Stronger blue
       x2: 60,
       y2: 90,
     },
@@ -192,7 +192,7 @@ function App() {
                 cx={getX(r.diastolic)}
                 cy={getY(r.systolic)}
                 r={4}
-                fill={getBPColor(r.systolic, r.diastolic)}
+                fill="#000"
                 stroke="#fff"
                 strokeWidth={1}
               />
