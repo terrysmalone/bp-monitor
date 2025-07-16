@@ -52,19 +52,35 @@ export default function BPGraph({
             // Removed rx={6} for sharp corners
           />
         ))}
-        {/* Dots */}
-        {readings.map((r, i) => (
-          <circle
-            key={`dot-${i}`}
-            cx={getX(r.diastolic)}
-            cy={getY(r.systolic)}
-            r={5}
-            fill="#000"
-            stroke="#fff"
-            strokeWidth={2}
-            style={{ filter: 'drop-shadow(0 1px 2px #8882)' }}
-          />
-        ))}
+        {/* Dots replaced with crosses */}
+        {readings.map((r, i) => {
+          const cx = getX(r.diastolic)
+          const cy = getY(r.systolic)
+          const crossSize = 7 // length of each line in the cross
+          const half = crossSize / 2
+          return (
+            <g key={`cross-${i}`}>
+              <line
+                x1={cx - half}
+                y1={cy - half}
+                x2={cx + half}
+                y2={cy + half}
+                stroke="#000"
+                strokeWidth={2}
+                style={{ filter: 'drop-shadow(0 1px 2px #8882)' }}
+              />
+              <line
+                x1={cx - half}
+                y1={cy + half}
+                x2={cx + half}
+                y2={cy - half}
+                stroke="#000"
+                strokeWidth={2}
+                style={{ filter: 'drop-shadow(0 1px 2px #8882)' }}
+              />
+            </g>
+          )
+        })}
         {/* Axes */}
         <line x1={padding} y1={padding} x2={padding} y2={graphHeight - padding} stroke="#888" strokeWidth={1.5} />
         <line x1={padding} y1={graphHeight - padding} x2={graphWidth - padding} y2={graphHeight - padding} stroke="#888" strokeWidth={1.5} />
